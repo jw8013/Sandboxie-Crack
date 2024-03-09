@@ -412,6 +412,18 @@ typedef int (*P_LoadString)(
 
 typedef BOOL (*P_SetProcessWindowStation)(HWINSTA hWinSta);
 
+/*typedef HDC(*P_GetWindowDC)(HWND hWnd);
+
+typedef HDC(*P_GetDC)(HWND hWnd);
+
+typedef HDC(*P_GetDCEx)(HWND hWnd, HRGN hrgnClip,DWORD flags);
+
+typedef BOOL (*P_PrintWindow)(HWND hwnd, HDC hdcBlt,UINT nFlags);*/
+
+typedef BOOL (*P_ShutdownBlockReasonCreate)(HWND hWnd, LPCWSTR pwszReason);
+
+typedef EXECUTION_STATE (*P_SetThreadExecutionState)(EXECUTION_STATE esFlags);
+
 typedef BOOL (*P_SetThreadDesktop)(HDESK hDesktop);
 
 typedef BOOL (*P_SwitchDesktop)(HDESK hDesktop);
@@ -534,6 +546,10 @@ extern ATOM Gui_WindowProcOldA_Atom;
 #endif
 #define GUI_SYS_VAR_2(nm)       GUI_SYS_VAR_AW(nm,A); GUI_SYS_VAR_AW(nm,W);
 
+/*GUI_SYS_VAR(GetDC)
+GUI_SYS_VAR(GetDCEx)
+GUI_SYS_VAR(GetWindowDC)
+GUI_SYS_VAR(PrintWindow)*/
 
 GUI_SYS_VAR(ClipCursor)
 GUI_SYS_VAR(GetClipCursor)
@@ -559,6 +575,8 @@ GUI_SYS_VAR(IsZoomed)
 GUI_SYS_VAR_2(SendMessage)
 GUI_SYS_VAR_2(SendMessageTimeout)
 //GUI_SYS_VAR_2(SendMessageCallback)
+GUI_SYS_VAR(ShutdownBlockReasonCreate)
+GUI_SYS_VAR(SetThreadExecutionState)
 GUI_SYS_VAR_2(SendNotifyMessage)
 GUI_SYS_VAR_2(PostMessage)
 GUI_SYS_VAR_2(PostThreadMessage)

@@ -380,6 +380,10 @@ _FX BOOLEAN Gui_Init(HMODULE module)
     Gui_UseProxyService = !Dll_CompartmentMode && !SbieApi_QueryConfBool(NULL, L"NoSandboxieDesktop", FALSE);
     // NoSbieDesk END
 
+	/*GUI_IMPORT___(PrintWindow)
+	GUI_IMPORT___(GetWindowDC)
+	GUI_IMPORT___(GetDC)
+	GUI_IMPORT___(GetDCEx)*/
     GUI_IMPORT___(GetWindowThreadProcessId);
     GUI_IMPORT___(SetThreadDesktop);
     GUI_IMPORT___(SwitchDesktop);
@@ -505,6 +509,7 @@ _FX BOOLEAN Gui_Init(HMODULE module)
     GUI_IMPORT_AW(PostMessage);
     GUI_IMPORT_AW(PostThreadMessage);
     GUI_IMPORT_AW(DispatchMessage);
+	GUI_IMPORT___(ShutdownBlockReasonCreate)
 
     GUI_IMPORT_AW(SetWindowsHookEx);
     GUI_IMPORT___(UnhookWindowsHookEx);
@@ -1597,6 +1602,12 @@ _FX LRESULT Gui_WindowProcW(
     if (uMsg == WM_CREATE)
 		Gui_ProtectScreen(hWnd);
 
+	if (uMsg == WM_QUERYENDSESSION)
+	{
+		if (SbieApi_QueryConfBool(NULL, "BlockInterferePower", FALSE))
+			return TRUE;
+	}
+
     wndproc = __sys_GetPropW(hWnd, (LPCWSTR)Gui_WindowProcOldW_Atom);
     if (DLL_IMAGE_OFFICE_EXCEL == Dll_ImageType) {
 
@@ -1654,7 +1665,11 @@ _FX LRESULT Gui_WindowProcA(
 		
 	if (uMsg == WM_CREATE)
 		Gui_ProtectScreen(hWnd);
-		
+	if (uMsg == WM_QUERYENDSESSION)
+	{
+		if (SbieApi_QueryConfBool(NULL, "BlockInterferePower", FALSE))
+			return TRUE;
+	}
     wndproc = __sys_GetPropW(hWnd, (LPCWSTR)Gui_WindowProcOldA_Atom);
     lResult = __sys_CallWindowProcA(wndproc, hWnd, uMsg, wParam, new_lParam);
 
